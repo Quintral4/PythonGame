@@ -11,14 +11,4 @@ To build this game, I applied the following programming fundamentals:
 * **Control Flow (`if/elif/else`):** To create multiple story branches depending on the player's choices.
 * **Loops (`while`):** To keep the game running continuously until the win or lose condition is met.
 
-## 🚀 How to run the project
-If you want to try the game on your computer, follow these steps:
-
-1. Make sure you have [Python](https://www.python.org/) installed.
-2. Download or clone this repository.
-3. Open your terminal and navigate to the project folder.
-4. Run the following command:
-   ```bash
-   python terminal_game.py
-
-Or.. https://quintral4.github.io/PythonGame/
+## 🚀 PLAY https://quintral4.github.io/PythonGame/
