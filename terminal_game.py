@@ -1,76 +1,73 @@
-# terminal_game.py
+
+
 import time
 
-print("🏰 ¡Bienvenido a la Aventura del Castillo Encantado! 🏰")
-print("Tu objetivo es escapar con vida. Cuidado con los peligros...\n")
+print("🏰 Welcome to the Enchanted Castle Adventure! 🏰")
+print("Your goal is to escape alive. Beware of the dangers...\n")
 time.sleep(1)
 
-# Variables del juego
+# Game variables
 hp = 100
-tiene_llave = False
-juego_terminado = False
+has_key = False
+game_over = False
 
-# Bucle principal: El juego continúa mientras tengas salud y no hayas terminado
-while not juego_terminado and hp > 0:
+# Main loop: The game continues while you have health and haven't finished
+while not game_over and hp > 0:
     print("-" * 40)
-    print(f"❤️  Salud actual: {hp} | 🗝️  Llave: {'Sí' if tiene_llave else 'No'}")
-    print("Estás en el Gran Salón. Tienes tres caminos:")
-    print("1. Ir a la izquierda (Cocina)")
-    print("2. Ir a la derecha (Biblioteca)")
-    print("3. Ir hacia adelante (Puerta Principal)")
+    print(f"❤️  Current HP: {hp} | 🗝️  Key: {'Yes' if has_key else 'No'}")
+    print("You are in the Great Hall. You have three paths:")
+    print("1. Go left (Kitchen)")
+    print("2. Go right (Library)")
+    print("3. Go forward (Main Door)")
     
-    # Toma de decisión principal
-    eleccion = input("\n¿Qué decides hacer? (Elige 1, 2 o 3): ")
+    # Main decision making
+    choice = input("\nWhat do you choose to do? (Choose 1, 2, or 3): ")
     
-    if eleccion == "1":
-        # Flujo de control dentro de una habitación
-        print("\nEntras a la cocina. Está muy oscura y escuchas un ruido extraño.")
-        print("1. Abrir la alacena misteriosa.")
-        print("2. Volver corriendo al Gran Salón.")
+    if choice == "1":
+        print("\nYou enter the kitchen. It's very dark and you hear a strange noise.")
+        print("1. Open the mysterious cupboard.")
+        print("2. Run back to the Great Hall.")
         
-        eleccion_cocina = input("¿Qué haces? (1 o 2): ")
+        kitchen_choice = input("What do you do? (1 or 2): ")
         
-        if eleccion_cocina == "1":
-            print("\n¡Oh no! Un goblin saltó de la alacena y te atacó.")
+        if kitchen_choice == "1":
+            print("\nOh no! A goblin jumped out of the cupboard and attacked you.")
             hp -= 30
-            print("Pierdes 30 puntos de salud. Logras escapar de vuelta al salón.")
-        elif eleccion_cocina == "2":
-            print("\nRegresas al Gran Salón a salvo.")
+            print("You lose 30 health points. You manage to escape back to the hall.")
+        elif kitchen_choice == "2":
+            print("\nYou return safely to the Great Hall.")
         else:
-            print("\nTe pones nervioso y tropiezas, regresando al Gran Salón.")
+            print("\nYou get nervous and trip, stumbling back to the Great Hall.")
             
-    elif eleccion == "2":
-        print("\nEntras a la biblioteca polvorienta. Ves un cofre brillante en una mesa.")
-        print("1. Abrir el cofre.")
-        print("2. Ignorar el cofre y volver al Gran Salón.")
+    elif choice == "2":
+        print("\nYou enter the dusty library. You see a glowing chest on a table.")
+        print("1. Open the chest.")
+        print("2. Ignore the chest and return to the Great Hall.")
         
-        eleccion_biblio = input("¿Qué haces? (1 o 2): ")
+        library_choice = input("What do you do? (1 or 2): ")
         
-        if eleccion_biblio == "1":
-            if not tiene_llave:
-                print("\n¡Encuentras la Llave Dorada! Esto podría abrir la puerta principal.")
-                tiene_llave = True
+        if library_choice == "1":
+            if not has_key:
+                print("\nYou found the Golden Key! This might open the main door.")
+                has_key = True
             else:
-                print("\nEl cofre está vacío. Ya tomaste la llave antes.")
+                print("\nThe chest is empty. You already took the key.")
         else:
-            print("\nRegresas al Gran Salón sin tocar nada.")
+            print("\nYou return to the Great Hall without touching anything.")
             
-    elif eleccion == "3":
-        print("\nTe acercas a la enorme Puerta Principal. Tiene una cerradura pesada.")
+    elif choice == "3":
+        print("\nYou approach the massive Main Door. It has a heavy lock.")
         
-        # Verificamos si el jugador cumplió la condición para ganar
-        if tiene_llave:
-            print("¡Usas la Llave Dorada y la puerta se abre crujiendo!")
-            print("\n🎉 ¡Felicidades! Escapaste del Castillo Encantado y ganaste el juego. 🎉")
-            juego_terminado = True
+        if has_key:
+            print("You use the Golden Key and the door creaks open!")
+            print("\n🎉 Congratulations! You escaped the Enchanted Castle and won the game. 🎉")
+            game_over = True
         else:
-            print("La puerta está bloqueada. Necesitas encontrar una llave para abrirla.")
-            print("Regresas al Gran Salón para seguir buscando.")
+            print("The door is locked. You need to find a key to open it.")
+            print("You return to the Great Hall to keep searching.")
             
     else:
-        # Manejo de errores si el usuario ingresa algo inválido
-        print("\n❌ Por favor, elige una opción válida (1, 2 o 3).")
+        print("\n❌ Please choose a valid option (1, 2, or 3).")
 
-# Mensaje de derrota si el bucle termina por falta de hp
 if hp <= 0:
-    print("\n💀 Te has quedado sin puntos de salud. ¡Fin del juego!")
+    print("\n💀 You have run out of health points. Game Over!")
