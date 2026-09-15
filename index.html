@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enchanted Castle Adventure</title>
+    <!-- PyScript -->
+    <link rel="stylesheet" href="https://pyscript.net/releases/2023.11.1/core.css" />
+    <script type="module" src="https://pyscript.net/releases/2023.11.1/core.js"></script>
+    
+    <style>
+        body {
+            background-color: #1E1E1E;
+            color: #42F590;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #game-container {
+            border: 2px solid #42F590;
+            padding: 30px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            background-color: #2A2A2A;
+            box-shadow: 0 0 15px #42F590;
+        }
+        h1 {
+            text-align: center;
+            text-shadow: 2px 2px #000;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed #42F590;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        #story-text {
+            font-size: 1.2em;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            min-height: 100px;
+            white-space: pre-wrap;
+        }
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        button {
+            background-color: #1E1E1E;
+            color: #42F590;
+            border: 1px solid #42F590;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background-color: #42F590;
+            color: #1E1E1E;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>🏰 Enchanted Castle 🏰</h1>
+        
+        <div class="stats">
+            <span>❤️ HP: <span id="hp-display">100</span></span>
+            <span>🗝️ Key: <span id="key-display">No</span></span>
+        </div>
+
+        <div id="story-text">Loading game...</div>
+
+        <div class="choices">
+            <button id="btn1" py-click="btn1_click">Option 1</button>
+            <button id="btn2" py-click="btn2_click">Option 2</button>
+            <button id="btn3" py-click="btn3_click">Option 3</button>
+        </div>
+    </div>
+
+    <!-- Python Logic adapted for Events -->
+    <py-script>
+        from pyscript import document
+
+        hp = 100
+        has_key = False
+        game_over = False
+        current_room = "great_hall"
+
+        def update_ui(text, b1_text, b2_text, b3_text):
+            document.getElementById("story-text").innerText = text
+            document.getElementById("hp-display").innerText = str(hp)
+            document.getElementById("key-display").innerText = "Yes" if has_key else "No"
+            
+            b1 = document.getElementById("btn1")
+            b2 = document.getElementById("btn2")
+            b3 = document.getElementById("btn3")
+            
+            if b1_text:
+                b1.innerText = b1_text
+                b1.style.display = "block"
+            else:
+                b1.style.display = "none"
+                
+            if b2_text:
+                b2.innerText = b2_text
+                b2.style.display = "block"
+            else:
+                b2.style.display = "none"
+                
+            if b3_text:
+                b3.innerText = b3_text
+                b3.style.display = "block"
+            else:
+                b3.style.display = "none"
+
+        def check_death():
+            global game_over
+            if hp <= 0:
+                game_over = True
+                update_ui("💀 You have run out of health points. Game Over!", "Restart Game", "", "")
+
+        def render_room():
+            if game_over and hp <= 0:
+                check_death()
+                return
+                
+            if current_room == "great_hall":
+                update_ui("You are in the Great Hall. You have three paths:", "1. Go left (Kitchen)", "2. Go right (Library)", "3. Go forward (Main Door)")
+            elif current_room == "kitchen":
+                update_ui("You enter the kitchen. It's very dark and you hear a strange noise.", "1. Open the mysterious cupboard", "2. Run back to the Great Hall", "")
+            elif current_room == "library":
+                update_ui("You enter the dusty library. You see a glowing chest on a table.", "1. Open the chest", "2. Return to the Great Hall", "")
+            elif current_room == "door":
+                if has_key:
+                    update_ui("You use the Golden Key and the door creaks open!\n\nCongratulations! You escaped the Enchanted Castle and won the game.", "Play Again", "", "")
+                else:
+                    update_ui("The door is locked. You need to find a key to open it.", "Return to the Great Hall", "", "")
+            elif current_room == "kitchen_attack":
+                update_ui("Oh no! A goblin jumped out of the cupboard and attacked you!\n\nYou lose 30 health points. You manage to escape back to the hall.", "Continue", "", "")
+            elif current_room == "library_chest":
+                if has_key:
+                    update_ui("The chest is empty. You already took the key.", "Return to Great Hall", "", "")
+                else:
+                    update_ui("You found the Golden Key! This might open the main door.", "Return to Great Hall", "", "")
+
+        def handle_action(choice):
+            global current_room, hp, has_key, game_over
+            
+            if game_over:
+                hp = 100
+                has_key = False
+                game_over = False
+                current_room = "great_hall"
+                render_room()
+                return
+
+            if current_room == "great_hall":
+                if choice == 1:
+                    current_room = "kitchen"
+                elif choice == 2:
+                    current_room = "library"
+                elif choice == 3:
+                    current_room = "door"
+                    
+            elif current_room == "kitchen":
+                if choice == 1:
+                    hp -= 30
+                    current_room = "kitchen_attack"
+                elif choice == 2:
+                    current_room = "great_hall"
+                    
+            elif current_room == "library":
+                if choice == 1:
+                    if not has_key:
+                        has_key = True
+                    current_room = "library_chest"
+                elif choice == 2:
+                    current_room = "great_hall"
+                    
+            elif current_room in ["kitchen_attack", "library_chest", "door"]:
+                if choice == 1:
+                    current_room = "great_hall"
+
+            if hp <= 0:
+                game_over = True
+                
+            render_room()
+
+        def btn1_click(event): handle_action(1)
+        def btn2_click(event): handle_action(2)
+        def btn3_click(event): handle_action(3)
+        
+        # Start the game
+        render_room()
+    </py-script>
+</body>
+</html>
