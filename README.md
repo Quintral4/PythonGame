@@ -20,3 +20,5 @@ If you want to try the game on your computer, follow these steps:
 4. Run the following command:
    ```bash
    python terminal_game.py
+
+Or.. https://quintral4.github.io/PythonGame/
